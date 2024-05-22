@@ -5,9 +5,13 @@ const routes = require('../server/routes');
 const loadModel = require('../services/loadModel');
 
 (async () => {
+    const isLocal = process.env.APP_ENV === 'local';
+    const host = isLocal ? 'localhost' : '0.0.0.0';
+    const port = isLocal ? 3000 : 8080;
+
     const server = Hapi.server({
-        port: 3000,
-        host: 'localhost',
+        port: port,
+        host: host,
         routes: {
             cors: {
                 origin: ['*'],
