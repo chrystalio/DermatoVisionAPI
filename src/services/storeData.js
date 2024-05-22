@@ -10,16 +10,20 @@ const storePrediction = async (imageData, prediction) => {
     const predictionsCollection = firestore.collection('predictions');
     const docRef = predictionsCollection.doc(prediction.id);
 
+    // Create a new object with the nested structure
     const dataToStore = {
-        id: prediction.id,
-        result: prediction.result,
-        suggestion: prediction.suggestion,
-        createdAt: prediction.createdAt,
+        data: {
+            id: prediction.id,
+            result: prediction.result,
+            suggestion: prediction.suggestion,
+            createdAt: prediction.createdAt,
+        }
     };
 
     await docRef.set(dataToStore);
 
     console.log(`Stored prediction ${prediction.id} in Firestore.`);
 };
+
 
 module.exports = storePrediction;
