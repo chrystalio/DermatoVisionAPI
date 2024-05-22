@@ -25,6 +25,7 @@ const predictHandler = async (request, h) => {
     try {
         const model = request.server.app.model;
         const predictionResult = await makePrediction(model, image._data);
+        console.log('Prediction result:', predictionResult);
 
         const result = predictionResult === 1 ? 'Cancer' : 'Non-cancer';
         const suggestion = result === 'Cancer' ? 'Segera periksa ke dokter!' : 'Tetap jaga kesehatan kulit Anda.';
