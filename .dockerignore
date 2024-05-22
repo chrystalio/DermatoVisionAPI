@@ -1,0 +1,11 @@
+# Ignore .env.example file
+.env.example
+
+# Ignore .gitignore file
+.gitignore
+
+# Ignore the model directory
+model/
+
+# Ignore the data-test directory
+data-test/
