@@ -7,22 +7,18 @@ const predictHandler = async (request, h) => {
     const { image } = request.payload;
 
     if (!image) {
-        return h.abandon(
-            h.response({
-                status: 'fail',
-                message: 'Image is required',
-            }).code(400)
-        );
+        return h.response({
+            status: 'fail',
+            message: 'Image is required',
+        }).code(400);
     }
 
     // Check if image size exceeds 1MB
-    if (image.bytes > 1000000) {
-        return h.abandon(
-            h.response({
-                status: 'fail',
-                message: 'Image size exceeds maximum allowed (1MB)',
-            }).code(413)
-        );
+    if (image.bytes > 1_000_000) {
+        return h.response({
+            status: 'fail',
+            message: 'Payload content length greater than maximum allowed: 1000000',
+        }).code(413);
     }
 
     try {
@@ -46,8 +42,11 @@ const predictHandler = async (request, h) => {
             data: prediction,
         }).code(201);
     } catch (error) {
-        console.error('Prediction error:', error);
-        return h.response({ status: 'fail', message: error.message }).code(500);
+        console.error('Prediction error:', error.message);
+        return h.response({
+            status: 'fail',
+            message: 'Terjadi kesalahan dalam melakukan prediksi',
+        }).code(400);
     }
 };
 
