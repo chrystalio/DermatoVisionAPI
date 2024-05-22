@@ -1,6 +1,7 @@
+const ClientError = require("../exceptions/ClientError");
+const InputError = require("../exceptions/InputError");
 const { makePrediction } = require('../services/inferenceService');
 const storePrediction = require('../services/storeData');
-const InputError = require('../exceptions/InputError');
 const { v4: uuidv4 } = require('uuid');
 
 const predictHandler = async (request, h) => {
@@ -25,11 +26,6 @@ const predictHandler = async (request, h) => {
         const model = request.server.app.model;
         const predictionResult = await makePrediction(model, image._data);
 
-        // Custom validation for prediction result
-        if (predictionResult !== 1 && predictionResult !== 0) {
-            throw new InputError('Invalid prediction result');
-        }
-
         const result = predictionResult === 1 ? 'Cancer' : 'Non-cancer';
         const suggestion = result === 'Cancer' ? 'Segera periksa ke dokter!' : 'Tetap jaga kesehatan kulit Anda.';
 
@@ -48,11 +44,19 @@ const predictHandler = async (request, h) => {
             data: prediction,
         }).code(201);
     } catch (error) {
-        console.error('Prediction error:', error.message);
-        return h.response({
-            status: 'fail',
-            message: 'Terjadi kesalahan dalam melakukan prediksi',
-        }).code(400);
+        if (error instanceof InputError) {
+            console.error('Input error:', error.message);
+            return h.response({
+                status: 'fail',
+                message: error.message, // Return specific error message for InputError
+            }).code(400);
+        } else {
+            console.error('Prediction error:', error.message);
+            return h.response({
+                status: 'fail',
+                message: 'Terjadi kesalahan dalam melakukan prediksi',
+            }).code(400);
+        }
     }
 };
 
