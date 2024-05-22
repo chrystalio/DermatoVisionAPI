@@ -18,9 +18,9 @@ const getPredictionHistories = async () => {
             return {
                 id: doc.id,
                 history: {
-                    result: data.result,
-                    createdAt: data.createdAt,
-                    suggestion: data.suggestion,
+                    result: data.result || "", 
+                    createdAt: data.createdAt || "", 
+                    suggestion: data.suggestion || "", 
                     id: doc.id
                 }
             };
@@ -32,5 +32,6 @@ const getPredictionHistories = async () => {
         throw error;
     }
 };
+
 
 module.exports = getPredictionHistories;
