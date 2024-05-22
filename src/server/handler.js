@@ -24,6 +24,12 @@ const predictHandler = async (request, h) => {
     try {
         const model = request.server.app.model;
         const predictionResult = await makePrediction(model, image._data);
+
+        // Custom validation for prediction result
+        if (predictionResult !== 1 && predictionResult !== 0) {
+            throw new InputError('Invalid prediction result');
+        }
+
         const result = predictionResult === 1 ? 'Cancer' : 'Non-cancer';
         const suggestion = result === 'Cancer' ? 'Segera periksa ke dokter!' : 'Tetap jaga kesehatan kulit Anda.';
 
