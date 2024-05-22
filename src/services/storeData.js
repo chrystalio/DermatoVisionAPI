@@ -7,23 +7,25 @@ const firestore = new Firestore({
 });
 
 const storePrediction = async (imageData, prediction) => {
-    const predictionsCollection = firestore.collection('predictions');
-    const docRef = predictionsCollection.doc(prediction.id);
+    try {
+        const predictionsCollection = firestore.collection('predictions');
+        const docRef = predictionsCollection.doc(prediction.id);
 
-    // Create a new object with the nested structure
-    const dataToStore = {
-        data: {
+        // Store prediction data directly without extra nesting
+        const dataToStore = {
             id: prediction.id,
             result: prediction.result,
             suggestion: prediction.suggestion,
             createdAt: prediction.createdAt,
-        }
-    };
+        };
 
-    await docRef.set(dataToStore);
+        await docRef.set(dataToStore);
 
-    console.log(`Stored prediction ${prediction.id} in Firestore.`);
+        console.log(`Stored prediction ${prediction.id} in Firestore.`);
+    } catch (error) {
+        console.error('Error storing prediction in Firestore:', error);
+        throw error;
+    }
 };
-
 
 module.exports = storePrediction;
