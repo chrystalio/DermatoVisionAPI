@@ -7,11 +7,22 @@ const predictHandler = async (request, h) => {
     const { image } = request.payload;
 
     if (!image) {
-        throw new InputError('Image is required');
+        return h.abandon(
+            h.response({
+                status: 'fail',
+                message: 'Image is required',
+            }).code(400)
+        );
     }
 
+    // Check if image size exceeds 1MB
     if (image.bytes > 1000000) {
-        throw new InputError('Image size must be less than 1MB');
+        return h.abandon(
+            h.response({
+                status: 'fail',
+                message: 'Image size exceeds maximum allowed (1MB)',
+            }).code(413)
+        );
     }
 
     try {
