@@ -1,7 +1,7 @@
 {
   "name": "dermatovisionapi",
   "version": "1.0.0",
-  "description": "",
+  "description": "DermatoVisionAPI: An API for skin cancer detection and classification using machine learning. Seamlessly integrate dermatology-related image analysis to web application.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -9,13 +9,14 @@
     "start": "node ./src/server/server.js"
   },
   "keywords": [],
-  "author": "Chrystalio",
+  "author": "Chrystalio (Kristoff)",
   "license": "ISC",
   "dependencies": {
     "@google-cloud/firestore": "^7.7.0",
     "@hapi/hapi": "^21.3.9",
     "@tensorflow/tfjs-node": "^4.19.0",
-    "dotenv": "^16.4.5"
+    "dotenv": "^16.4.5",
+    "uuid": "^9.0.1"
   },
   "devDependencies": {
     "nodemon": "^3.1.0"
