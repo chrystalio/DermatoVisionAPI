@@ -29,16 +29,17 @@ const loadModel = require('../services/loadModel');
 
     server.ext('onPreResponse', function (request, h) {
         const response = request.response;
-
+    
         if (response.isBoom) {
+            const statusCode = response.output.payload.statusCode || 500;
             const newResponse = h.response({
                 status: 'fail',
                 message: response.message
             });
-            newResponse.code(response.statusCode);
+            newResponse.code(statusCode);
             return newResponse;
         }
-
+    
         return h.continue;
     });
 
