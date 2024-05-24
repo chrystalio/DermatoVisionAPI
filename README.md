@@ -65,7 +65,7 @@ DermatoVisionAPI is a RESTful API for dermatological image analysis. It focuses 
     ```plaintext
     APP_ENV=local
     MODEL_URL=./model/model.json
-    GCLOUD_PROJECT_ID=your-project-id
+    GCLOUD_PROJECT_ID={projectID}
     GCLOUD_KEY_FILE=config/service.json
     ```
 
@@ -75,6 +75,31 @@ DermatoVisionAPI is a RESTful API for dermatological image analysis. It focuses 
     npm run start:dev
     ```
 
+
+## Deploying on Google Cloud Platform
+
+1. Build the Docker image:
+
+    ```sh
+    docker build -t {region}-docker.pkg.dev/{projectID}/dermatovision-image/dermatovision-api:v1 .
+    ```
+2. Create Docker Repository inside Artifact Registry
+    ```sh
+    gcloud artifacts repositories create dermatovision-image --repository-format=docker --location={region} --description="DermatovisionAPI Docker Repository" --project={projectID}
+    ```
+3. Authenticate Docker to use the Artifact Registry repository
+    ```sh
+    gcloud auth configure-docker {region}-docker.pkg.dev
+    ```
+4. Push the Docker image to the Artifact Registry repository
+    ```sh
+     docker push {region}-docker.pkg.dev/{projectID}/dermatovision-image/dermatovision-api:v1
+    ```
+5. Deploy it on Cloud Run
+    ```sh
+    gcloud run deploy DermatoVisionAPI --image={region}-docker.pkg.dev/{projectID}/dermatovision-image/dermatovision-api:v1 --region={region} --allow-unauthenticated
+    ```
+    
 ## Troubleshooting
 If you encounter issues with permissions or environment variables, ensure that:
 
